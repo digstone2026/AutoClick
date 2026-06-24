@@ -1,42 +1,36 @@
 package com.example.autoclick
 
 import android.accessibilityservice.AccessibilityService
-import android.accessibilityservice.GestureDescription
-import android.graphics.Path
-import android.view.accessibility.AccessibilityEvent
+import android.content.Intent
+import android.os.Bundle
+import android.provider.Settings
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.app.Activity
 
-class AutoClickService : AccessibilityService() {
+class MainActivity : Activity() {
 
-    var running = false
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    override fun onServiceConnected() {
-        super.onServiceConnected()
-        startAutoClick()
+        val layout = LinearLayout(this)
+        layout.orientation = LinearLayout.VERTICAL
+
+        val info = TextView(this)
+        info.text = "AutoClick 工具\n\n1. 点击按钮开启无障碍\n2. 开启后自动点击"
+        info.textSize = 18f
+
+        val btn = Button(this)
+        btn.text = "开启无障碍设置"
+
+        btn.setOnClickListener {
+            startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+        }
+
+        layout.addView(info)
+        layout.addView(btn)
+
+        setContentView(layout)
     }
-
-    private fun startAutoClick() {
-        running = true
-
-        Thread {
-            while (running) {
-                click(500, 1000)   // 👈 修改这里的坐标
-                Thread.sleep(1000) // 👈 点击间隔
-            }
-        }.start()
-    }
-
-    private fun click(x: Int, y: Int) {
-        val path = Path()
-        path.moveTo(x.toFloat(), y.toFloat())
-
-        val gesture = GestureDescription.Builder()
-            .addStroke(GestureDescription.StrokeDescription(path, 0, 50))
-            .build()
-
-        dispatchGesture(gesture, null, null)
-    }
-
-    override fun onAccessibilityEvent(event: AccessibilityEvent?) {}
-
-    override fun onInterrupt() {}
 }
