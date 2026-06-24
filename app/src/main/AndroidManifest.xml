@@ -3,8 +3,9 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
 
     <application
-        android:label="AutoClick"
-        android:allowBackup="true">
+    android:label="AutoClick"
+    android:icon="@mipmap/ic_launcher"
+    android:allowBackup="true">
 
         <activity android:name=".MainActivity"
             android:exported="true">
